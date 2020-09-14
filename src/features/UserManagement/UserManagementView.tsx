@@ -60,8 +60,36 @@ const data = {
     mobileNo: 9754821630
 }
 
-const columns = ['Roles', 'Status', '']
-
+//const columns = ['Roles', 'Status', '']
+const columns = [
+    {
+        id: "profilePicPath",
+        label: '',
+    },
+    {
+        id: "name",
+        label: 'Visitor name'
+    },
+    {
+        id: "mobile",
+        label: 'Mobile No.'
+    },
+    {
+        id: "tomeet",
+        label: 'Person to meet'
+    },
+    {
+        id: "purpose",
+        label: 'Purpose'
+    },
+    {
+        id: "intime",
+        label: 'In Time'
+    },
+    {
+        id: "outtime",
+        label: 'Out Time'
+    }]
 const UserManagementView: FunctionComponent<Props> = (props) => {
     const classes = useStyles()
 
@@ -97,7 +125,7 @@ const UserManagementView: FunctionComponent<Props> = (props) => {
     }
 
     return (
-        <Grid item xs style={{height: "inherit", marginTop: '22px'}}>
+        <Grid item xs style={{height: "calc(100vh - 100px)"}}>
             <Paper className={classes.paper}>
                 <div className={classes.header}>
                     <ArrowBackIos className={classes.arrowBack}/>

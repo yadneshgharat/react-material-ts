@@ -30,7 +30,8 @@ const useStyles = makeStyles((theme: Theme) =>
         paper: {
             backgroundColor: '#E7ECF6',
             borderRadius: theme.shape.borderRadius - 5,
-            marginRight: 30
+            marginRight: 30,
+            height: '100%'
         },
         cell: {
             borderBottom: 'none'
@@ -104,8 +105,36 @@ const data = {
     outTime: '2:30 pm',
 }
 
-const columns = ['', 'Visitor name', 'Mobile No.', 'Person to meet', 'Purpose', 'In Time', 'Out Time']
-
+//const columns = ['', 'Visitor name', 'Mobile No.', 'Person to meet', 'Purpose', 'In Time', 'Out Time']
+const columns = [
+    {
+        id: "profilePicPath",
+        label: '',
+    },
+    {
+        id: "name",
+        label: 'Visitor name'
+    },
+    {
+        id: "mobile",
+        label: 'Mobile No.'
+    },
+    {
+        id: "tomeet",
+        label: 'Person to meet'
+    },
+    {
+        id: "purpose",
+        label: 'Purpose'
+    },
+    {
+        id: "intime",
+        label: 'In Time'
+    },
+    {
+        id: "outtime",
+        label: 'Out Time'
+    }]
 interface OwnProps {
 }
 
@@ -126,7 +155,7 @@ const InviteView: FunctionComponent<Props> = (props) => {
 
     let tableRows: any = []
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 2; i++) {
         let copy: any = tableRows
 
         tableRows = [data, ...copy]
@@ -142,10 +171,10 @@ const InviteView: FunctionComponent<Props> = (props) => {
     }
 
     return (
-        <Grid item xs style={{height: "100%", marginTop: '22px'}}>
+        <Grid item xs style={{height: "calc(100vh - 100px)"}}>
             <Paper className={classes.paper}>
                 <Box display="flex" justifyContent="start">
-                    <SearchInput placeholder="Search visitor"/>
+                    <SearchInput placeholder="S earch visitor"/>
                     <SelectInput value="In Office"/>
                     <SelectInput value="All Purpose"/>
                     <SelectInput value="All Sites"/>

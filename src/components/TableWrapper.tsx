@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useState} from 'react';
+import React, {FunctionComponent, useEffect, useState} from 'react';
 import {
     Button,
     createStyles, Menu, MenuItem, MenuProps,
@@ -15,7 +15,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import {Link} from "react-router-dom";
 
 interface IRowProps {
-    [x: string]: any;
+    [id: string]: any;
 }
 
 interface IMenuItemProps {
@@ -27,9 +27,16 @@ interface ITableCellProps {
     padding?: number;
 }
 
+interface IColumnsConfig {
+    id: any,
+    label: any,
+    sequence?:number,
+    isSort?:boolean,
+    isFilterable?:boolean
+}
 interface IConfigObject {
-    columns: string[];
-    data: IRowProps[];
+    columns: IColumnsConfig[];
+    data:any;
     menuOptions: IMenuItemProps[];
     cellOptions?: ITableCellProps;
 }
@@ -99,10 +106,16 @@ const TableWrapper: FunctionComponent<Props> = ({config, ...props}) => {
         setAnchorEl(null);
     };
 
+    useEffect(() => console.log(config.data), [])
+
+    const menuOptios = () => {
+
+    }
+
     const TableHeader = <TableHead className={classes.header}>
         {
             config.columns.map(column => (
-                <TableCell key={column}>{column}</TableCell>
+                <TableCell key={column.id}>{column.label}</TableCell>
             ))
         }
 
@@ -110,10 +123,10 @@ const TableWrapper: FunctionComponent<Props> = ({config, ...props}) => {
 
     const body = <TableBody>
         {
-            config.data.map((value, i) => (
+            config.data.map((row:any, i:number) => (
                 <TableRow key={i}>
                     {
-                        Object.keys(value).map((key, i) => <TableCell key={i}>{value[key]}</TableCell>)
+                        config.columns.map( (col:any) => <TableCell key={row.id || i}>{row[col.id]}</TableCell>) 
                     }
                     <TableCell className={classes.cell} align="center">
                         <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
@@ -128,11 +141,10 @@ const TableWrapper: FunctionComponent<Props> = ({config, ...props}) => {
                         >
                             {config.menuOptions.map(({title, path}) => (
                                 <StyledMenuItem key={title} onClick={handleClose}>
-                                    <Link to={path} style={{textDecoration: "none", color: "#192949"}}>
+                                    <Link to={path + "/" + value.id} style={{textDecoration: "none", color: "#192949"}}>
                                         {title}
                                     </Link>
                                 </StyledMenuItem>
-
                             ))}
                             {/*<StyledMenuItem onClick={handleClose}>Check Out</StyledMenuItem>*/}
                             {/*<StyledMenuItem onClick={handleClose}>Resend Code</StyledMenuItem>*/}

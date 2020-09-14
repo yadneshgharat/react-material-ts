@@ -37,8 +37,36 @@ const data = {
     checkInPorts: 'Gate 1',
 }
 
-const columns = ['Device name', 'App Version', 'Ios Version', 'Check In Ports']
-
+//const columns = ['Device name', 'App Version', 'Ios Version', 'Check In Ports']
+const columns = [
+    {
+        id: "profilePicPath",
+        label: '',
+    },
+    {
+        id: "name",
+        label: 'Visitor name'
+    },
+    {
+        id: "mobile",
+        label: 'Mobile No.'
+    },
+    {
+        id: "tomeet",
+        label: 'Person to meet'
+    },
+    {
+        id: "purpose",
+        label: 'Purpose'
+    },
+    {
+        id: "intime",
+        label: 'In Time'
+    },
+    {
+        id: "outtime",
+        label: 'Out Time'
+    }]
 const DevicesView: FunctionComponent<Props> = (props) => {
     const classes = useStyles()
 
@@ -59,7 +87,7 @@ const DevicesView: FunctionComponent<Props> = (props) => {
     }
 
     return (
-        <Grid item xs style={{height: "100%", marginTop: '22px'}}>
+        <Grid item xs style={{height: "calc(100vh - 100px)"}}>
             <Paper className={classes.paper}>
                 <Box display="flex" justifyContent="space-between">
                     <SearchInput placeholder="Search Devices" width={400}/>
