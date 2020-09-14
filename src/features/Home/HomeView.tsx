@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useState} from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
 import {
     Avatar,
     Box,
@@ -16,13 +16,19 @@ import {
     TableRow,
     Theme
 } from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import HomeStats from "./HomeStats";
 import HomeDateDropdown from "./HomeDateDropdown";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import SearchIcon from '@material-ui/icons/Search';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import TableWrapper from "../../components/TableWrapper";
+import SearchInput from "../../components/SearchInput";
+import SelectInput from "../../components/SelectInput";
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchVisitors } from 'features/Home/visitorSlice'
+import { fetchHomeStats } from 'features/Home/homeSlice'
+import { RootState } from 'app/rootReducer'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -122,109 +128,76 @@ const HomeView: FunctionComponent<Props> = (props) => {
         tableRows = [data, ...copy]
     }
 
+    const dispatch = useDispatch()
+
+    const {
+        visitors,
+        currentPageVisitors,
+        pageCount,
+        pageLinks,
+        isLoading: isLoadingVisitor,
+        error
+    } = useSelector((state: RootState) => state.visitors)
+
+    const {
+        checked_out,
+        in_office,
+        invite_sent,
+        total_visitor,
+        visitors: visitorStats,
+        isLoading: isLoadingHomeStats,
+        error: homeStatsError
+    } = useSelector((state: RootState) => state.home)
+
+    useEffect(() => {
+        dispatch(fetchVisitors(0))
+        dispatch(fetchHomeStats())
+
+    }, [dispatch])
+
+    if (error) {
+        return (
+            <div>
+                <h1>Something went wrong...</h1>
+                <div>{error.toString()}</div>
+            </div>
+        )
+    }
+
+    const TableConfig = {
+        columns: columns,
+        data: visitors,
+        menuOptions: [{
+            title: 'View Details',
+            path: "/visitor/" + 2
+        }]
+    }
+
+    const homeStatsConfig ={
+        checked_out,
+        in_office,
+        invite_sent,
+        total_visitor,
+        visitorStats,
+        isLoadingHomeStats,
+    }
     return (
         <>
-            <Grid item xs={12} style={{height: "250px", marginTop: 0,}}>
+            <Grid item xs={12} style={{ height: "250px", marginTop: 0, }}>
                 <Paper className={classes.paper}>
-                    <HomeDateDropdown/>
-                    <HomeStats/>
+                    <HomeDateDropdown />
+                    <HomeStats config= {homeStatsConfig}/>
                 </Paper>
             </Grid>
-            <Grid item xs style={{height: "100%", marginTop: '22px'}}>
+            <Grid item xs style={{ height: "100%", marginTop: '22px' }}>
                 <Paper className={classes.paper}>
                     <Box display="flex" justifyContent="start">
-                        <div className={classes.inputContainer}>
-                            <div className={classes.search}>
-                                <div className={classes.searchIcon}>
-                                    <SearchIcon/>
-                                </div>
-                                <InputBase
-                                    placeholder="Search visitor"
-                                    classes={{
-                                        root: classes.inputRoot,
-                                        input: classes.inputInput,
-                                    }}
-                                    inputProps={{'aria-label': 'search'}}
-                                />
-                            </div>
-                        </div>
-                        <div className={classes.inputContainer}>
-                            <div className={classes.select}>
-                                <InputLabel id="demo-simple-select-label" style={{
-                                    // padding: '0 10px',
-                                    // height: '100%',
-                                    position: 'absolute',
-                                    top: '18px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                }}>In Office</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    disableUnderline
-                                    className={classes.inputRoot}
-                                    style={{
-                                        borderBottom: 'none',
-                                        // padding: '12px',
-                                        width: '100%'
-                                    }}
-                                >
-                                    <MenuItem>1</MenuItem>
-                                </Select>
-                            </div>
-                        </div>
-                        <div className={classes.inputContainer}>
-                            <div className={classes.select}>
-                                <InputLabel id="demo-simple-select-label" style={{
-                                    // padding: '0 10px',
-                                    // height: '100%',
-                                    position: 'absolute',
-                                    top: '18px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                }}>All Purpose</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    disableUnderline
-                                    className={classes.inputRoot}
-                                    style={{
-                                        borderBottom: 'none',
-                                        // padding: '12px',
-                                        width: '100%'
-                                    }}
-                                >
-                                    <MenuItem>1</MenuItem>
-                                </Select>
-                            </div>
-                        </div>
-                        <div className={classes.inputContainer}>
-                            <div className={classes.select}>
-                                <InputLabel id="demo-simple-select-label" style={{
-                                    // padding: '0 10px',
-                                    // height: '100%',
-                                    position: 'absolute',
-                                    top: '18px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                }}>All Sites</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    disableUnderline
-                                    className={classes.inputRoot}
-                                    style={{
-                                        borderBottom: 'none',
-                                        // padding: '12px',
-                                        width: '100%'
-                                    }}
-                                >
-                                    <MenuItem>1</MenuItem>
-                                </Select>
-                            </div>
-                        </div>
+                        <SearchInput placeholder="Search visitor" />
+                        <SelectInput value="In Office" />
+                        <SelectInput value="All Purpose" />
+                        <SelectInput value="All Sites" />
                     </Box>
-                    <TableWrapper columns={columns} data={tableRows}/>
+                    <TableWrapper config={TableConfig} />
                 </Paper>
             </Grid>
         </>

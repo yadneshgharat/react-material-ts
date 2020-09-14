@@ -4,17 +4,15 @@ import {Box, createMuiTheme, createStyles, Grid, Paper, Theme} from "@material-u
 import {makeStyles} from "@material-ui/core/styles"
 import {Switch, Route} from 'react-router-dom'
 import './styles.css'
-import CustomDrawer from "./CustomDrawer";
-import HomeView from "./features/Home/HomeView";
-import NavGridContainer from "./components/NavGridContainer";
-import InviteView from "./features/Invites/InviteView";
-import VisitorDetailsView from "./features/Home/VisitorDetailsView";
-import EmployeesView from "./features/Employees/EmployeesView";
-import SitesView from "./features/SalesAndOrganisation/SitesView";
-import CheckInPointsView from "./features/SalesAndOrganisation/CheckInPointsView";
-import DevicesView from "./features/Settings/DevicesView";
-import UserManagementView from "./features/UserManagement/UserManagementView";
-import AgreementView from "./features/Settings/AgreementView";
+import CustomDrawer from "../CustomDrawer";
+import HomeView from "../features/Home/HomeView";
+import NavGridContainer from "../components/NavGridContainer";
+import InviteView from "../features/Invites/InviteView";
+import VisitorDetailsView from "../features/Home/VisitorDetailsView";
+import EmployeesView from "../features/Employees/EmployeesView";
+import SitesView from "../features/SalesAndOrganisation/SitesView";
+import CheckInPointsView from "../features/SalesAndOrganisation/CheckInPointsView";
+import DevicesView from "../features/Settings/DevicesView";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -25,12 +23,8 @@ const useStyles = makeStyles((theme: Theme) =>
             height: 'inherit',
             overflow: 'hidden'
         },
-        fullHeightContainer: {
-            height: '100%',
-            // overflow: 'auto'
-        },
         paper: {
-            height: '100vh',
+            height: '100%',
             padding: theme.spacing(0),
             textAlign: 'center',
             backgroundColor: '#192949',
@@ -48,7 +42,7 @@ export default function App() {
     return (
         <Box height="100vh">
             <Container maxWidth={"xl"} className={classes.root}>
-                <Grid container spacing={3} className={classes.fullHeightContainer}>
+                <Grid container spacing={3}>
                     <Grid item md={2}>
                         <Box className={classes.paper}>
                             <CustomDrawer/>
@@ -63,9 +57,7 @@ export default function App() {
                                 <Route path="/employees" component={EmployeesView}/>
                                 <Route path="/sites" component={SitesView}/>
                                 <Route path="/checkinpoints" component={CheckInPointsView}/>
-                                <Route path="/user" component={UserManagementView}/>
                                 <Route path="/devices" component={DevicesView}/>
-                                <Route path="/agreement" component={AgreementView}/>
                             </Switch>
                         </NavGridContainer>
                     </Grid>
